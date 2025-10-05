@@ -1,14 +1,14 @@
-# 🌟 VIRTUAL STATOSCOPE - Exoplanet Detection System
+# 🌟 EXOVISION - EXOPLANET DETECTION SYSTEM
 
 ## NASA Space Apps Challenge 2025 Project
 
-**Team:** VIRTUAL STATOSCOPE  
+**Team:** Code Surgeons Innovator
 **Challenge:** Exoplanet Detection using AI/ML  
 **Dataset:** NASA Exoplanet Archive PHOTOMETRIC Data  
 
 ### 🚀 Project Overview
 
-VIRTUAL STATOSCOPE is an advanced machine learning system that automatically detects exoplanets by analyzing stellar light curves from NASA's photometric dataset. Our system uses the transit method to identify the characteristic dimming patterns that occur when an exoplanet passes in front of its host star.
+EXOVISION is an advanced machine learning system that automatically detects exoplanets by analyzing stellar light curves from NASA's photometric dataset. Our system uses the transit method to identify the characteristic dimming patterns that occur when an exoplanet passes in front of its host star.
 
 ### 🎯 Key Features
 
@@ -157,7 +157,7 @@ Our fast training approach includes:
 
 ### 👥 Team
 
-**VIRTUAL STATOSCOPE** - NASA Space Apps Challenge 2025 participants dedicated to advancing exoplanet discovery through innovative AI/ML solutions.
+**Code Surgeons Innovator** - NASA Space Apps Challenge 2025 participants dedicated to advancing exoplanet discovery through innovative AI/ML solutions.
 
 ### 📄 License
 
@@ -179,5 +179,6 @@ This project is developed for the NASA Space Apps Challenge 2025. Please refer t
 💻 **GitHub**: [github.com/noamanayub](https://github.com/noamanayub)  
 
 ---
+
 
 **🌍 Discovering New Worlds Through Machine Learning** 🚀
