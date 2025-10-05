@@ -1,0 +1,56 @@
+# VIRTUAL STATOSCOPE - Exoplanet Detection System
+# NASA Space Apps Challenge 2025
+# Requirements file for Python dependencies
+
+# Core Web Framework
+flask==3.1.2
+flask-cors==6.0.1
+
+# Data Science & Machine Learning
+numpy==1.26.4
+pandas==2.3.3
+scikit-learn==1.7.2
+lightgbm==4.6.0
+joblib==1.5.2
+
+# Deep Learning (Optional - for advanced models)
+tensorflow==2.20.0
+keras==3.11.3
+
+# Data Visualization
+matplotlib==3.8.1
+seaborn==0.13.2
+
+# Scientific Computing
+scipy==1.16.2
+
+# Data Processing
+requests==2.31.0
+python-multipart==0.0.20
+
+# Development & Notebook Support
+jupyter==1.1.1
+ipykernel==6.30.1
+ipython==9.6.0
+
+# Utility Libraries
+tqdm==4.67.1
+pillow==10.4.0
+python-dateutil==2.9.0
+
+# Optional: Web API Framework (Alternative to Flask)
+# fastapi==0.118.0
+# uvicorn==0.37.0
+
+# Optional: Audio Processing (if needed for extended features)
+# pydub==0.25.1
+# soundfile==0.12.1
+
+# Optional: Advanced ML Features
+# torch==2.2.0  # PyTorch for additional deep learning models
+# huggingface-hub==0.35.3  # For pre-trained models
+
+# Development Dependencies (Optional)
+# pytest>=7.0.0
+# black>=22.0.0
+# flake8>=4.0.0

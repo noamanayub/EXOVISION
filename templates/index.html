@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪐 NASA Exoplanet Detective | Space Apps Challenge 2025</title>
+    
+    <!-- External CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- 3D Background Canvas -->
+    <canvas id="space-canvas" style="position: fixed; top: 0; left: 0; z-index: -1; width: 100%; height: 100%;"></canvas>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" id="brand">
+                <i class="fas fa-rocket me-2"></i>
+                <span class="brand-text">EXOPLANET DETECTIVE</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#upload-section"><i class="fas fa-upload me-1"></i>Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#results-section"><i class="fas fa-chart-line me-1"></i>Results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#models-section"><i class="fas fa-robot me-1"></i>Models</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about-section"><i class="fas fa-info-circle me-1"></i>About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-8 mx-auto text-center">
+                    <div class="hero-content">
+                        <h1 class="hero-title">
+                            <span class="text-white">DISCOVER</span><br>
+                            <span class="text-white">EXOPLANETS</span><br>
+                            <span class="text-white">WITH AI</span>
+                        </h1>
+                        <p class="hero-subtitle text-white">
+                            NASA Space Apps Challenge 2025 • Advanced machine learning pipeline for exoplanet detection using light curve analysis
+                        </p>
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <div class="stat-number text-white" id="models-count">{{ total_models if total_models else 6 }}</div>
+                                <div class="stat-label text-white">AI Models</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number text-white">15</div>
+                                <div class="stat-label text-white">Features</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number text-white">{{ average_accuracy if average_accuracy else 61 }}%</div>
+                                <div class="stat-label text-white">Avg Accuracy</div>
+                            </div>
+                        </div>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary btn-lg me-3" onclick="scrollToSection('upload-section')">
+                                <i class="fas fa-rocket me-2"></i>Start Detection
+                            </button>
+                            <button class="btn btn-outline-light btn-lg" onclick="loadSampleData()">
+                                <i class="fas fa-flask me-2"></i>Try Sample Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload-section" class="py-5 bg-dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="section-header text-center mb-5">
+                        <h2 class="section-title">
+                            <i class="fas fa-upload text-primary me-3"></i>
+                            Upload Light Curve Data
+                        </h2>
+                        <p class="section-subtitle">
+                            Upload your stellar light curve data (CSV format) and let our AI models detect exoplanets
+                        </p>
+                    </div>
+
+                    <!-- Upload Card -->
+                    <div class="upload-card">
+                        <!-- Model Selection -->
+                        <div class="model-selection-section mb-4">
+                            <h5 class="text-center mb-3">
+                                <i class="fas fa-robot text-primary me-2"></i>
+                                Select Model
+                            </h5>
+                            <div class="model-selector">
+                                <select class="form-select" id="modelSelect">
+                                    <option value="all">All Models (Ensemble)</option>
+                                    <!-- Models will be populated by JavaScript -->
+                                </select>
+                                <small class="form-text text-muted mt-2">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Select a specific model or use all models for ensemble prediction
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h4>Drag & Drop your light curve file</h4>
+                                <p class="mb-3">or <span class="text-primary">browse</span> to choose a file</p>
+                                <div class="upload-info">
+                                    <small>
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Supported formats: CSV, TXT • Must contain 'time' and 'flux' columns
+                                    </small>
+                                </div>
+                            </div>
+                            <input type="file" id="fileInput" accept=".csv,.txt" style="display: none;">
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="upload-progress" id="uploadProgress" style="display: none;">
+                            <div class="progress mb-3">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="progress-text text-center">
+                                <span id="progressText">Uploading...</span>
+                            </div>
+                        </div>
+
+                        <!-- Sample Data Options -->
+                        <div class="sample-data-section mt-4">
+                            <h5 class="text-center mb-3">
+                                <i class="fas fa-star text-warning me-2"></i>
+                                Or try sample data
+                            </h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <button class="btn btn-outline-primary w-100" onclick="loadSampleData()">
+                                        <i class="fas fa-chart-line me-2"></i>Random Sample
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-outline-warning w-100" onclick="generateTestData()">
+                                        <i class="fas fa-cog me-2"></i>Generate Test Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results-section" class="py-5" style="display: none;">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line text-success me-3"></i>
+                    Detection Results
+                </h2>
+                <p class="section-subtitle">
+                    Analysis results from all AI models running simultaneously
+                </p>
+            </div>
+
+            <!-- File Info -->
+            <div class="row mb-4">
+                <div class="col-lg-8 mx-auto">
+                    <div class="info-card">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="info-item">
+                                    <i class="fas fa-file-alt text-primary"></i>
+                                    <div class="info-label">File</div>
+                                    <div class="info-value" id="fileName">-</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-item">
+                                    <i class="fas fa-clock text-info"></i>
+                                    <div class="info-label">Data Points</div>
+                                    <div class="info-value" id="dataPoints">-</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-item">
+                                    <i class="fas fa-calendar text-warning"></i>
+                                    <div class="info-label">Time Span</div>
+                                    <div class="info-value" id="timeSpan">-</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-item">
+                                    <i class="fas fa-robot text-success"></i>
+                                    <div class="info-label">Models</div>
+                                    <div class="info-value" id="modelCount">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Results -->
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="results-container" id="modelResults">
+                        <!-- Model results will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            <div class="row mt-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="visualization-card">
+                        <h4 class="text-center mb-4">
+                            <i class="fas fa-chart-area text-primary me-2"></i>
+                            Analysis Visualization
+                        </h4>
+                        <div class="text-center" id="visualizationContainer">
+                            <!-- Visualization will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consensus -->
+            <div class="row mt-4">
+                <div class="col-lg-6 mx-auto">
+                    <div class="consensus-card" id="consensusCard">
+                        <!-- Consensus result will be shown here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Models Section -->
+    <section id="models-section" class="py-5 bg-dark">
+        <div class="container">
+            <div class="section-header text-center mb-5">
+                <h2 class="section-title">
+                    <i class="fas fa-robot text-primary me-3"></i>
+                    AI Models
+                </h2>
+                <p class="section-subtitle">
+                    Multiple machine learning approaches for robust exoplanet detection
+                </p>
+            </div>
+
+            <div class="row g-4" id="modelsContainer">
+                <!-- Model cards will be populated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about-section" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="section-header text-center mb-5">
+                        <h2 class="section-title">
+                            <i class="fas fa-satellite-dish text-info me-3"></i>
+                            About the Project
+                        </h2>
+                    </div>
+
+                    <div class="about-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <i class="fas fa-eye feature-icon text-primary"></i>
+                                    <h4>Transit Method</h4>
+                                    <p>Detects exoplanets by analyzing periodic dimming in stellar light curves caused by planetary transits.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <i class="fas fa-brain feature-icon text-success"></i>
+                                    <h4>AI-Powered</h4>
+                                    <p>Uses multiple machine learning models including Random Forest, LightGBM, Neural Networks, CNN, and LSTM.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <i class="fas fa-cogs feature-icon text-warning"></i>
+                                    <h4>Feature Engineering</h4>
+                                    <p>Extracts 25+ meaningful features from light curves including statistical, frequency, and transit-specific features.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="feature-card">
+                                    <i class="fas fa-rocket feature-icon text-info"></i>
+                                    <h4>NASA Data</h4>
+                                    <p>Trained on NASA's PHOTOMETRIC dataset containing real stellar observations from space telescopes.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tech-stack mt-5">
+                            <h4 class="text-center mb-4">Technology Stack</h4>
+                            <div class="tech-badges">
+                                <span class="tech-badge">Python</span>
+                                <span class="tech-badge">TensorFlow</span>
+                                <span class="tech-badge">Scikit-learn</span>
+                                <span class="tech-badge">LightGBM</span>
+                                <span class="tech-badge">Flask</span>
+                                <span class="tech-badge">Bootstrap</span>
+                                <span class="tech-badge">JavaScript</span>
+                                <span class="tech-badge">NASA Dataset</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="footer-brand">
+                        <i class="fas fa-rocket me-2"></i>
+                        <strong>NASA Space Apps Challenge 2025</strong>
+                    </div>
+                    <p class="mt-2 mb-1">Exoplanet Detection using AI/ML</p>
+                    <div class="developer-info">
+                        <small class="text-muted">
+                            <i class="fas fa-user-astronaut me-1"></i>
+                            Developed by <strong>Noaman Ayub</strong>
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="footer-links mb-2">
+                        <a href="https://noamanayub.netlify.app/" target="_blank" class="text-light me-3" title="Portfolio">
+                            <i class="fas fa-globe"></i> Portfolio
+                        </a>
+                        <a href="https://www.linkedin.com/in/noamanayub/" target="_blank" class="text-light me-3" title="LinkedIn">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a>
+                        <a href="https://github.com/noamanayub" target="_blank" class="text-light me-3" title="GitHub">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                    <div class="footer-links">
+                        <a href="https://www.spaceappschallenge.org" target="_blank" class="text-light">
+                            <i class="fas fa-rocket"></i> Space Apps
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-body text-center py-5">
+                    <div class="loading-spinner mb-3">
+                        <i class="fas fa-satellite-dish fa-spin fa-3x text-primary"></i>
+                    </div>
+                    <h4>Analyzing Light Curve</h4>
+                    <p class="mb-0">Running AI models for exoplanet detection...</p>
+                    <div class="loading-progress mt-3">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
