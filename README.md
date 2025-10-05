@@ -43,7 +43,7 @@ EXOVISION is an advanced machine learning system that automatically detects exop
 ### 📁 Project Structure
 
 ```
-VIRTUAL_STATOSCOPE/
+EXOVISION/
 ├── app.py                          # Flask web application
 ├── exoplanet_detection.ipynb       # Main ML pipeline notebook
 ├── model_comparison.md             # Model performance analysis
@@ -70,7 +70,7 @@ VIRTUAL_STATOSCOPE/
 #### 1. Clone & Setup
 ```bash
 git clone <repository-url>
-cd VIRTUAL_STATOSCOPE
+cd EXOVISION
 ```
 
 #### 2. Create Virtual Environment
@@ -182,3 +182,4 @@ This project is developed for the NASA Space Apps Challenge 2025. Please refer t
 
 
 **🌍 Discovering New Worlds Through Machine Learning** 🚀
+
